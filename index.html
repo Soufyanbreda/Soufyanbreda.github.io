@@ -1,0 +1,279 @@
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Multichannel Bot</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" src="https://fonts.googleapis.com/css?family=Open+Sans" />
+</head>
+
+<body>
+	<nav class="nav">
+		<div class="brand">
+			<img src="https://www.cm.com/cdn/cm/cm-com.png" alt="CM logo">
+			Multichannel Bot
+		</div>
+		<div class="options">
+			Soufyan Testomgeving
+		</div>
+	</nav>
+
+	<div class="sub-bar">
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+
+		<div class="background" id="color-picker" data-background="">#</div>
+		<div class="background" style="background-color: #F44336;" data-background="#F44336"></div>
+		<div class="background" style="background-color: #FF9800;" data-background="#FF9800"></div>
+		<div class="background" style="background-color: #9C27B0;" data-background="#9C27B0"></div>
+		<div class="background" style="background-color: #673AB7;" data-background="#673AB7"></div>
+		<div class="background" style="background-color: #1e2e92;" data-background="#1e2e92"></div>
+		<div class="background" style="background-color: #3F51B5;" data-background="#3F51B5"></div>
+		<div class="background" style="background-color: #03A9F4;" data-background="#03A9F4"></div>
+		<div class="background" style="background-color: #18FFFF;" data-background="#18FFFF"></div>
+		<div class="background" style="background-color: #4CAF50;" data-background="#4CAF50"></div>
+		<div class="background" style="background-color: #009688;" data-background="#009688"></div>
+		<div class="background" style="background-color: #e5e5e5;" data-background="#e5e5e5"></div>
+		<div class="color dark" data-color="black">Aa</div>
+		<div class="color light" data-color="#eeeeee">Aa</div>
+		<img id="color-toggler" src="https://www.sessions.edu/wp-content/themes/divi-child/color-calculator/wheel-5-ryb.png" />
+	</div>
+
+	<main class="content">
+		<div class="bot">
+			<iframe id="frame" src="http://mcbot.messaging.cmgroep.local/s/chat" frameborder="0"></iframe>
+		</div>
+	</main>
+
+	<script>
+		// every element with a data-background or data-color attribute, reversed
+		const mainColors = Array
+			.from(document.querySelectorAll('[data-background], [data-color]'))
+			.reverse();
+
+		// only the background colors
+		const backgrounds = mainColors.filter(color => color.dataset.background);
+
+		// only the colors
+		const colors = mainColors.filter(color => color.dataset.color);
+
+		// custom color pickers
+		const colorPicker = document.getElementById('color-picker');
+
+		backgrounds.forEach(el => el.addEventListener('click', function () {
+			const { background } = this.dataset;
+			setBackground(this, background);
+		}));
+
+		colors.forEach(el => el.addEventListener('click', function () {
+			const { color } = this.dataset;
+			document.documentElement.style.setProperty('--color-tint', color);
+			localStorage.setItem('--color-tint', color);
+			toggleColorsVisibility();
+		}));
+
+		colorPicker.addEventListener('click', function () {
+			const background = prompt("Set hex color eg. #ffffff");
+
+			if (background) {
+				setBackground(this, background);
+			}
+		});
+
+		const toggleColorsVisibility = () => mainColors.forEach(color => color.classList.toggle('visible'));
+
+		const setBackground = (el, background) => {
+			// set CSS variable to selected background
+			document.documentElement.style.setProperty('--color-main', background);
+
+			// save the user's choice
+			localStorage.setItem('--color-main', background);
+
+			// selected color will become active
+			backgrounds.forEach(background => background.classList.remove('active'));
+			el.classList.add('active');
+
+			// hide the colors after selection
+			toggleColorsVisibility();
+		};
+
+		document.getElementById('color-toggler').addEventListener('click', toggleColorsVisibility);
+
+		document.addEventListener('DOMContentLoaded', () => {
+			// set transition based on index
+			mainColors.forEach((color, index) => color.style.transition = `opacity ${index / 10}s ease-in-out`);
+
+			// loop through localStorage
+			Object.entries(localStorage).forEach(([key, value]) => {
+				document.documentElement.style.setProperty(key, value);
+
+				if (key === '--color-main') {
+					// try to find the saved background element and toggle it active, else toggle the custom color picker
+					const selector = document.querySelector(`[data-background='${value}']`);
+					(selector || colorPicker).classList.add('active');
+				}
+			});
+		});
+	</script>
+
+</body>
+
+<style>
+	:root {
+		--color-main: #F4F4F4;
+		--color-tint: #193140;
+	}
+
+	html {
+		font-family: 'Open Sans', sans-serif;
+	}
+
+	#frame {
+		width: 100%;
+		height: 100%;
+		border: 1px solid black;
+		position: relative;
+	}
+
+	* {
+		font-family: inherit;
+	}
+
+	body {
+		margin: 0;
+		color: var(--color-tint);
+		background-color: var(--color-main);
+		display: flex;
+		flex-direction: column;
+	}
+
+	.nav {
+		padding: 30px 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: var(--color-main);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		font-style: normal;
+		 font-weight: bold;
+		  font-size: large;
+	}
+
+	.brand img {
+		width: 100px;
+		height: 50px;
+		
+	}
+
+	.sub-bar {
+		padding: 20px 40px;
+		background-color: var(--color-tint);
+		color: var(--color-main);
+		display: grid;
+		grid-gap: 20px;
+		grid-template-columns: 1fr;
+		align-items: center;
+		grid-auto-flow: column;
+	}
+
+	.sub-bar ul {
+		list-style-type: none;
+		padding: 0;
+		display: flex;
+	}
+
+	.sub-bar ul li {
+		color: var(--color-tint);
+		padding: 10px 20px;
+	}
+
+	.content {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+	}
+
+	.bot {
+		width: 80%;
+		height: 600px;
+		margin: 100px;
+		background-color: var(--color-main);
+	}
+
+	/* Color Picker */
+	.background {
+		width: 26px;
+		height: 26px;
+		border: 2px solid var(--color-tint);
+		border-radius: 50%;
+		cursor: pointer;
+	}
+
+	.background.active {
+		border-color: var(--color-main);
+	}
+
+	.color {
+		width: 26px;
+		height: 26px;
+		font-weight: bold;
+		cursor: pointer;
+	}
+	
+	.sub-bar ul li {
+	color: var(--color-main);
+	padding: 10px 20px;
+}
+
+	.color.light {
+		background-color: var(--color-main);
+		color: #eeeeee;
+		border: 2px solid #eeeeee;
+	}
+
+	.color.dark {
+		background-color: var(--color-main);
+		color: black;
+		border: 2px solid black;
+	}
+
+	[data-background],
+	[data-color] {
+		opacity: 0;
+	}
+
+	[data-background].visible,
+	[data-color].visible {
+		opacity: 1;
+	}
+
+	#color-picker {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-color: var(--color-main);
+		color: var(--color-main);
+	}
+
+	#color-picker.active {
+		background-color: var(--color-main);
+		font-weight: bold;
+	}
+
+	#color-toggler {
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+	}
+</style>
+
+</html>
