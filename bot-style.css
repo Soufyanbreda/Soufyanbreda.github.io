@@ -7,12 +7,15 @@ background-color:rgba(90, 195, 202, 0.3);
   border-bottom: 2px solid #fff;
 }
 
+
+
+
 .botpress__side-header-bot-name,
 .botpress__message-date,
 .botpress__side-item-name,
 .botpress__side-internal .botpress__side-header .botpress__toggle-convos-button i,
 .botpress__side-internal .botpress__side-header .botpress__close-button i {
-  color: #fff;
+  color: #e12c2c ;
 }
 
 .botpress__side-conversation,
