@@ -7,8 +7,13 @@ background-color:rgba(90, 195, 202, 0.3);
   border-bottom: 2px solid #fff;
 }
 
+.background{
+	color: #e12c2c ;
+}
 
-
+.body{
+	 font-family: "Times New Roman", Times, serif;
+}
 
 .botpress__side-header-bot-name,
 .botpress__message-date,
