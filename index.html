@@ -1,275 +1,545 @@
+
+
+<!DOCTYPE html>
 <html>
-
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<title>Souff & Sjoerd Studios</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link rel="stylesheet" src="https://fonts.googleapis.com/css?family=Open+Sans" />
-</head>
-
-<body>
-	<nav class="nav">
-		<div class="brand">
-			Souff & Sjoerd Studios
-		</div>
-	</nav>
-
-	<div class="sub-bar">
-		<ul>
-			<li>Item 1</li>
-			<li>Item 2</li>
-			<li>Item 3</li>
-		</ul>
-
-		<div class="background" id="color-picker" data-background="">#</div>
-		<div class="background" style="background-color: #F44336;" data-background="#F44336"></div>
-		<div class="background" style="background-color: #FF9800;" data-background="#FF9800"></div>
-		<div class="background" style="background-color: #9C27B0;" data-background="#9C27B0"></div>
-		<div class="background" style="background-color: #673AB7;" data-background="#673AB7"></div>
-		<div class="background" style="background-color: #1e2e92;" data-background="#1e2e92"></div>
-		<div class="background" style="background-color: #3F51B5;" data-background="#3F51B5"></div>
-		<div class="background" style="background-color: #03A9F4;" data-background="#03A9F4"></div>
-		<div class="background" style="background-color: #18FFFF;" data-background="#18FFFF"></div>
-		<div class="background" style="background-color: #4CAF50;" data-background="#4CAF50"></div>
-		<div class="background" style="background-color: #009688;" data-background="#009688"></div>
-		<div class="background" style="background-color: #e5e5e5;" data-background="#e5e5e5"></div>
-		<div class="color dark" data-color="black">Aa</div>
-		<div class="color light" data-color="#eeeeee">Aa</div>
-		<img id="color-toggler" src="https://www.sessions.edu/wp-content/themes/divi-child/color-calculator/wheel-5-ryb.png" />
-	</div>
-
-	<main class="content">
-		<div class="bot">
-			<img src="images/3.jpg" alt="CM logo">
-		</div>
-	</main>
-
-	<script>
-		// every element with a data-background or data-color attribute, reversed
-		const mainColors = Array
-			.from(document.querySelectorAll('[data-background], [data-color]'))
-			.reverse();
-
-		// only the background colors
-		const backgrounds = mainColors.filter(color => color.dataset.background);
-
-		// only the colors
-		const colors = mainColors.filter(color => color.dataset.color);
-
-		// custom color pickers
-		const colorPicker = document.getElementById('color-picker');
-
-		backgrounds.forEach(el => el.addEventListener('click', function () {
-			const { background } = this.dataset;
-			setBackground(this, background);
-		}));
-
-		colors.forEach(el => el.addEventListener('click', function () {
-			const { color } = this.dataset;
-			document.documentElement.style.setProperty('--color-tint', color);
-			localStorage.setItem('--color-tint', color);
-			toggleColorsVisibility();
-		}));
-
-		colorPicker.addEventListener('click', function () {
-			const background = prompt("Set hex color eg. #ffffff");
-
-			if (background) {
-				setBackground(this, background);
-			}
-		});
-
-		const toggleColorsVisibility = () => mainColors.forEach(color => color.classList.toggle('visible'));
-
-		const setBackground = (el, background) => {
-			// set CSS variable to selected background
-			document.documentElement.style.setProperty('--color-main', background);
-
-			// save the user's choice
-			localStorage.setItem('--color-main', background);
-
-			// selected color will become active
-			backgrounds.forEach(background => background.classList.remove('active'));
-			el.classList.add('active');
-
-			// hide the colors after selection
-			toggleColorsVisibility();
-		};
-
-		document.getElementById('color-toggler').addEventListener('click', toggleColorsVisibility);
-
-		document.addEventListener('DOMContentLoaded', () => {
-			// set transition based on index
-			mainColors.forEach((color, index) => color.style.transition = `opacity ${index / 10}s ease-in-out`);
-
-			// loop through localStorage
-			Object.entries(localStorage).forEach(([key, value]) => {
-				document.documentElement.style.setProperty(key, value);
-
-				if (key === '--color-main') {
-					// try to find the saved background element and toggle it active, else toggle the custom color picker
-					const selector = document.querySelector(`[data-background='${value}']`);
-					(selector || colorPicker).classList.add('active');
-				}
-			});
-		});
-	</script>
-
-</body>
-
-<style>
-	:root {
-		--color-main: #F4F4F4;
-		--color-tint: #193140;
-	}
-
-	html {
-		font-family: 'Open Sans', sans-serif;
-	}
-
-	#frame {
-		width: 100%;
-		height: 100%;
-		border: 1px solid black;
-		position: relative;
-	}
-
-	* {
-		font-family: inherit;
-	}
-
-	body {
-		margin: 0;
-		color: var(--color-tint);
-		background-color: var(--color-main);
-		display: flex;
-		flex-direction: column;
-	}
-
-	.nav {
-		padding: 30px 20px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		background-color: var(--color-main);
-	}
-
-	.brand {
-		display: flex;
-		align-items: center;
-		font-style: normal;
-		 font-weight: bold;
-		  font-size: large;
-	}
-
-	.brand img {
-		width: 100px;
-		height: 50px;
-		
-	}
-
-	.sub-bar {
-		padding: 20px 40px;
-		background-color: var(--color-tint);
-		color: var(--color-main);
-		display: grid;
-		grid-gap: 20px;
-		grid-template-columns: 1fr;
-		align-items: center;
-		grid-auto-flow: column;
-	}
-
-	.sub-bar ul {
-		list-style-type: none;
-		padding: 0;
-		display: flex;
-	}
-
-	.sub-bar ul li {
-		color: var(--color-tint);
-		padding: 10px 20px;
-	}
-
-	.content {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 1;
-	}
-
-	.bot {
-		width: 80%;
-		height: 600px;
-		margin: 100px;
-		background-color: var(--color-main);
-	}
-
-	/* Color Picker */
-	.background {
-		width: 26px;
-		height: 26px;
-		border: 2px solid var(--color-tint);
-		border-radius: 50%;
-		cursor: pointer;
-	}
-
-	.background.active {
-		border-color: var(--color-main);
-	}
-
-	.color {
-		width: 26px;
-		height: 26px;
-		font-weight: bold;
-		cursor: pointer;
-	}
-	
-	.sub-bar ul li {
-	color: var(--color-main);
-	padding: 10px 20px;
-}
-
-	.color.light {
-		background-color: var(--color-main);
-		color: #eeeeee;
-		border: 2px solid #eeeeee;
-	}
-
-	.color.dark {
-		background-color: var(--color-main);
-		color: black;
-		border: 2px solid black;
-	}
-
-	[data-background],
-	[data-color] {
-		opacity: 0;
-	}
-
-	[data-background].visible,
-	[data-color].visible {
-		opacity: 1;
-	}
-
-	#color-picker {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-color: var(--color-main);
-		color: var(--color-main);
-	}
-
-	#color-picker.active {
-		background-color: var(--color-main);
-		font-weight: bold;
-	}
-
-	#color-toggler {
-		width: 30px;
-		height: 30px;
-		cursor: pointer;
-	}
-</style>
-
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel='stylesheet' type='text/css' href='bootstrap/css/bootstrap.min.css' >
+      <link rel='stylesheet' type='text/css' href='css/linea.css' >
+      <link rel='stylesheet' type='text/css' href='css/ionicons.min.css' >
+      <link rel='stylesheet' type='text/css' href='css/owl.carousel.css' >
+      <link rel='stylesheet' type='text/css' href='css/magnific-popup.css' >
+      <link rel='stylesheet' type='text/css' href='css/style.css' >
+      <link rel="shortcut icon" href="img/fav.png">
+      <title>Soufyan Bargach</title>
+   </head>
+   <body>
+      <a class="drop" onclick="mobdrop()"><img src="img/drop.png"></a>
+      <ul class="header1" id="header1">
+         <li id="soufian">Soufyan Bargach</li>
+         <li class="firsti"><a onclick='scrollto("mainsec")'>Home</a></li>
+         <li><a onclick='scrollto("sec5")' target="_blank">resume</a></li>
+         <li><a onclick='scrollto("sec2")' >technologies</a></li>
+         <li class="lasti"><a onclick='scrollto("sec3")' >Projects</a></li>
+         <li onclick="mobdrop()" class="close15"> </li>
+      </ul>
+      <div id="mainsec" class="mainsec">
+         <a onclick='scrollto("sec5")'><img class="profile" src="img/profile.jpg"></a>
+         <h1>I'm Soufyan Bargach</h1>
+         <h2> A hardworking, self-motivated professional </h2>
+         <table class="teblelinks">
+            <tr>
+               <td><a onclick='scrollto("sec5")' class="button24">MY RESUME</a></td>
+               <td><a href="https://www.linkedin.com" class="button25" target="_blank">
+                  <img src="img/github.png" width="40">
+                  </a>
+               </td>
+               <td><a href="https://www.linkedin.com" class="button25" target="_blank">
+                  <img src="img/linkedin.png" width="40">
+                  </a>
+               </td>
+            </tr>
+         </table>
+      </div>
+      <div id="sec2" class="sec2">
+	  <br>
+         <h2 style="text-align:center;"> <strong class="color">Technologies</strong></h2><br>
+         <table class="techcont"  >
+            <tr>
+               <td width="25%" class="links15">
+                  <ul>
+                     <li><a id="link1" onclick="table1();">React</a></li>
+                     <li><a id="link2" onclick="table2();">Js2</a></li>
+                     <li><a id="link3" onclick="table3();">jquery</a></li>
+                     <li><a id="link4" onclick="table4();">tech2</a></li>
+                  </ul>
+               </td>
+               <td width="75%">
+                  <table id="techtable1" class="techtable">
+                     <tr>
+                        <td><img src="img/react.png"></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <h3>React</h3>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <p>Ei constituam theophrastus per, sea dolorum disputationi in, vel menandri suavitate similique in. Vide assum conceptam eum.</p>
+                        </td>
+                     </tr>
+                  </table>
+                  <table id="techtable2" class="techtable">
+                     <tr>
+                        <td><img src="img/js2.png"></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <h3>js2</h3>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <p>sea dolorum disputationi in, vel menandri suavitate similique in. Vide assum conceptam eum.Ei constituam theophrastus per, </p>
+                        </td>
+                     </tr>
+                  </table>
+                  <table id="techtable3" class="techtable">
+                     <tr>
+                        <td><img src="img/jquery.png"></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <h3>jquery</h3>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <p>sea dolorum disputationi i Ei constituam theophrastus per, n, vel menandri suavitate similique in. Vide assum conceptam eum.</p>
+                        </td>
+                     </tr>
+                  </table>
+                  <table id="techtable4" class="techtable">
+                     <tr>
+                        <td><img src="img/tech2.png"></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <h3>tech2</h3>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <p>tate similique in Ei constituam theophrastus per, sea dolorum disputationi in, vel menandri suavi. Vide assum conceptam eum.</p>
+                        </td>
+                     </tr>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </div>
+      <div id="sec3" class="sec3">
+         <div class="projectcont" id="prokects15">
+            <div class="section-header">
+               <br>
+               <h2 style="text-align:center;"> <strong class="color">My Projects</strong></h2>
+               <br><br>
+            </div>
+            <ul class="portfolio-items shuffle" style="overflow: hidden; height: 608px; transition: height 250ms ease-out 0s;">
+               <li data-groups="[&quot;web&quot;,&quot;tech&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/1.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-1" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-1" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/1.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li data-groups="[&quot;tech&quot;,&quot;photography&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; opacity: 1; transform: translate3d(379px, 0px, 0px) scale3d(1, 1, 1); transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/2.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-2" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-2" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/2.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li data-groups="[&quot;web&quot;,&quot;photography&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; opacity: 1; transform: translate3d(758px, 0px, 0px) scale3d(1, 1, 1); transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/3.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-3" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-3" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/3.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li data-groups="[&quot;web&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; opacity: 1; transform: translate3d(0px, 194px, 0px) scale3d(1, 1, 1); transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/4.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-4" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-4" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/4.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li data-groups="[&quot;tech&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; opacity: 1; transform: translate3d(379px, 304px, 0px) scale3d(1, 1, 1); transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/5.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-5" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-5" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/5.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li data-groups="[&quot;photography&quot;]" class="shuffle-item filtered" style="position: absolute; top: 0px; left: 0px; visibility: visible; opacity: 1; transform: translate3d(758px, 304px, 0px) scale3d(1, 1, 1); transition: transform 250ms ease-out 0s, opacity 250ms ease-out 0s;">
+                  <div class="inner">
+                     <img src="img/portfolio/6.jpg" alt="">
+                     <div class="overlay">
+                        <a href="#popup-6" class="view-project">
+                        View Project
+                        </a>
+                        <!--project popup-->
+                        <div id="popup-6" class="popup-box zoom-anim-dialog mfp-hide">
+                           <figure>
+                              <!--project popup image-->
+                              <img src="img/portfolio/6.jpg" alt="">
+                           </figure>
+                           <div class="content">
+                              <!--project popup title-->
+                              <h4>My Project Title</h4>
+                              <!--project popup description-->
+                              <p>
+                                 Consul latine iudicabit eu vel. Cu has animal eruditi voluptatibus. Eu volumus explicari sed. Mel mutat vituperata suscipiantur et, et fabellas explicari adipiscing quo, no mucius euismod vis. Cu vim quem quod cibo.
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </div>
+      <br><br>
+      <div class="sec5" id="sec5">
+         <h1 style="color:#2d3986; "> <strong class="color">MY RESUME</strong></h1><br><br>
+         <table>
+            <tr>
+               <td class="left1x">Geboortedatum</td>
+               <td>22-02-1994</td>
+            </tr>
+            <tr>
+               <td class="left1x">Telefoon</td>
+               <td>06 14 13 45 69</td>
+            </tr>
+            <tr>
+               <td class="left1x">Email</td>
+               <td>s.bargach@student.fontys.nl</td>
+            </tr>
+            <tr>
+               <td class="left1x">Adres</td>
+               <td>Hendrik Berlagestraat 46<br>
+                  4827JK Breda
+               </td>
+            </tr>
+            <tr>
+               <td class="left1x">Opleiding</td>
+               <td>HBO-ICT</td>
+            </tr>
+         </table>
+      </div>
+      <section id="resume" class="section resume-section border-d active">
+         <div id="resume2" class="section-block timeline-block">
+            <div class="container-fluid2">
+               <div class="section-header">
+               </div>
+               <ul class="timeline">
+                  <li>
+                     <div class="timeline-content box15">
+                        <h2>Opleidingen</h2>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>HBO-ICT Software Engineering   	 
+                           Fontys Hogeschool Tilburg 
+                        </h4>
+                        <em>
+                        <span> </span>
+                        <span>2014 - heden</span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>HAVO Economie &amp; Maatschappij  	 
+                           Newmancollege Breda
+                        </h4>
+                        <em>
+                        <span> </span>
+                        <span>2009 - 2014 </span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box15">
+                        <h2>ICT werkervaring </h2>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Stage Software Developer
+                           Ellips
+                        </h4>
+                        <em>
+                        <span> </span>
+                        <span>februari 2017 - juni 2017 </span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box15">
+                        <h2>Certificaten</h2>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Cambridge English Certificate (FCE) 
+                           Grade A 
+                        </h4>
+                        <em>
+                        <span> </span>
+                        <span>2013</span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box15">
+                        <h2>ICT-vaardigheden </h2>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Java  
+                        </h4>
+                        <em>
+                        <span>Java EE, Android, JPA, JavaFX, Spark, Maven, Gradle </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>.NET   
+                        </h4>
+                        <em>
+                        <span>Web API, Entity Framework, ASP.NET, Web Forms, Umbraco, 
+                        WCF services  
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>JavaScript   
+                        </h4>
+                        <em>
+                        <span>React, Node.js, Vue.js, Chrome Extension, JQuery   
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>HTML / CSS    
+                        </h4>
+                        <em>
+                        <span>HTML5, CSS3, Bootstrap    
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Database    
+                        </h4>
+                        <em>
+                        <span>MySQL, PL/SQL, MongoDB, Oracle    
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Ontwikkelmethodes     
+                        </h4>
+                        <em>
+                        <span>Agile / Scrum   
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Platformen      
+                        </h4>
+                        <em>
+                        <span>Windows, Linux, Mac OS X 
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Netwerk     
+                        </h4>
+                        <em>
+                        <span>Docker, Webservers, Active Directory
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box15">
+                        <h2>Talen</h2>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Nederlands    
+                        </h4>
+                        <em>
+                        <span>Vloeiend
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+                  <li>
+                     <div class="timeline-content box14">
+                        <h4>Engels     
+                        </h4>
+                        <em>
+                        <span>Spreken, schrijven 
+                        </span>
+                        <span></span>
+                        </em>
+                        <p>
+                        </p>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <div class="section-block timeline-block"> 
+         </div>
+         <div class="section-block testimonials-block"> 
+         </div>
+      </section>
+      <br><br><br>
+      <p style="text-align:center;font-family:arial;">&copy; Sofian Bargach</p>
+      <br><br><br>
+      <script src='js/jquery.min.js' ></script>
+      <script src='js/jquery.shuffle.min.js' ></script>
+      <script src='js/owl.carousel.min.js' ></script>
+      <script src='js/jquery.magnific-popup.min.js' ></script>
+      <script src='js/validator.min.js' ></script>
+      <script src='js/script.js' ></script>
+   </body>
 </html>
+
