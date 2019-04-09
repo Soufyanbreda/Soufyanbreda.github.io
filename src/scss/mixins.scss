@@ -1,0 +1,122 @@
+@mixin center($direction: row) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: $direction;
+}
+
+@mixin spread($justification) {
+  display: flex;
+  align-items: center;
+  justify-content: $justification;
+}
+
+@mixin columns($count) {
+  display: grid;
+  grid-template-columns: repeat($count, 1fr);
+  grid-gap: 2rem;
+}
+
+@mixin border-shadow-radius($border-width, $border-color, $border-radius: null) {
+  @if ($border-width) {
+
+  } @else {
+
+  }
+}
+
+@mixin border($radius: null) {
+  border: .1rem solid $color-secondary;
+  @if ($radius) {
+    border-radius: $radius;
+  }
+}
+
+@mixin triangle($color, $size, $side) {
+  $sides: (
+    left: 'right',
+    top: 'bottom',
+    bottom: 'top',
+    right: 'left'
+  );
+
+  border: $size solid transparent;
+  $triangle-side: map-get($sides, $side);
+  border-#{$triangle-side}-color: $color;
+}
+
+$direction-rotations: (
+  top: rotate(-45deg),
+  right: rotate(45deg),
+  bottom: rotate(135deg),
+  left: rotate(-135deg)
+);
+
+@mixin chevron($direction, $size) {
+  border-style: solid;
+  border-width: $size $size 0 0;
+  // content: '';
+  width: 0.45em;
+  height: 0.45em;
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  transform: map-get($direction-rotations, $direction);
+
+  @if ($direction == 'top') {
+    left: 0.15em;
+    top: 0.15em;
+  } @else if ($direction == 'right') {
+    left: 0;
+  } @else if ($direction == 'bottom') {
+    top: 0;
+  } @else if ($direction == 'left') {
+    left: 0.25em;
+  }
+}
+
+@mixin box-arrow($direction, $arrow-size, $background-color, $border-color, $border-size) {
+  content: '';
+  width: $arrow-size;
+  height: $arrow-size;
+  transform: map-get($direction-rotations, $direction);
+  background-color: $background-color;
+  border: $border-size solid $border-color;
+  border-width: $border-size $border-size 0 0;
+  position: absolute;
+
+  $border-calc: calc(#{-$arrow-size / 2} - #{$border-size});
+  $align-calc: calc(50% - 1rem);
+
+  @if ($direction == 'top') {
+    top: $border-calc;
+    left: $align-calc;
+  } @else if ($direction == 'right') {
+    right: $border-calc;
+    top: $align-calc;
+  } @else if ($direction == 'bottom') {
+    bottom: $border-calc;
+    left: $align-calc;
+  } @else if ($direction == 'left') {
+    left: $border-calc;
+    top: $align-calc;
+  }
+}
+
+$breakpoints: (
+  'extra-small': 480px,
+  'small': 767px,
+  'medium': 992px,
+  'large': 1200px
+);
+
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}

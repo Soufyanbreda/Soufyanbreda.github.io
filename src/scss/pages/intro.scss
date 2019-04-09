@@ -1,0 +1,48 @@
+.intro {
+  padding: 4rem;
+  @include center;
+  flex-wrap: wrap;
+
+  &__text {
+    flex: 1 1 50%;
+
+    &__links {
+      display: flex;
+
+      & > * {
+        flex: 1;
+      }
+    }
+  }
+
+  &__picture {
+    flex: 0 0 30rem;
+    height: 30rem;
+    margin: 1rem;
+    border-radius: 50%;
+    border: .1rem solid $color-secondary;
+
+    img {
+      width: 30rem;
+      height: 30rem;
+      border-radius: 50%;
+    }
+  }
+}
+
+@include respond-to('medium') {
+  .intro {
+    margin-top: 4rem;
+
+    &__text {
+      order: 2;
+      text-align: center;
+    }
+
+    &__picture {
+      order: 1;
+      flex-basis: 16rem;
+      height: 16rem;
+    }
+  }
+}

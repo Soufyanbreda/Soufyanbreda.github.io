@@ -1,0 +1,44 @@
+
+.projects {
+  @include columns(2);
+
+  &__heading,
+  &__intro {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: center;
+  }
+
+  .project-button {
+    margin: 0;
+    padding: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+
+.project-details {
+  color: $color-primary;
+  background-color: white;
+  $border-size: .2rem;
+  border: $border-size solid $color-primary;
+  border-radius: $border-radius;
+  text-align: center;
+  position: relative;
+
+  @include respond-to('small') {
+    margin-bottom: 2rem;
+  }
+
+  .button {
+    margin: 0 auto;
+  }
+
+  &:after {
+    @include box-arrow('left', 2rem, $color-white, $color-primary, .2rem);
+
+    @include respond-to('small') {
+      @include box-arrow('top', 2rem, $color-white, $color-primary, .2rem);
+    }
+  }
+}
